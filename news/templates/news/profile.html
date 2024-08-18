@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Profile</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="id_username">Username:</label>
+    {{ form.username }}
+    <label for="id_email">Email:</label>
+    {{ form.email }}
+    <!-- Additional fields from your form class -->
+    <button type="submit">Update Profile</button>
+  </form>
+{% endblock %}

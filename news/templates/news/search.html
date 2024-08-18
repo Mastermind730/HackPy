@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Hackpy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f6f6ef;
+            margin: 0;
+            padding: 0;
+        }
+        .app-bar {
+            background-color: #ff6600;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .app-bar a {
+            color: black;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+        .app-bar a:hover {
+            text-decoration: underline;
+        }
+        .login-button {
+            margin-left: auto;
+            background-color: #ff6600;
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .login-button:hover {
+            background-color: #e65c00;
+        }
+        .login-button a {
+            color: black;
+            text-decoration: none;
+        }
+        .news-item {
+            background-color: white;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #dcdcdc;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+        }
+        .news-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .news-link {
+            color: #000;
+            text-decoration: none;
+        }
+        .news-link:hover {
+            text-decoration: underline;
+        }
+        .news-details {
+            font-size: 12px;
+            color: #828282;
+        }
+        .news-details a {
+            color: #828282;
+            text-decoration: none;
+        }
+        .news-details a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: left;
+            margin-left: 12px;
+        }
+        .pagination a {
+            padding: 5px 10px;
+            color: black;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #ff6600;
+            color: black;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background-color: #f6f6ef;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            border-top: #e65c00 2px solid;
+            bottom: 0;
+            width: 100%;
+        }
+        .search-bar input[type="text"] {
+            padding: 8px;
+            width: 60%;
+            border: 1px solid #dcdcdc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .search-bar button {
+            padding: 8px 16px;
+            margin-left: 10px;
+            background-color: #ff6600;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .search-bar button:hover {
+            background-color: #e65c00;
+        }
+        .serial-number {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .upvote-button {
+            color: black;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 1px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="app-bar">
+            <a class="app-menu1" href="/">Hackpy</a>
+           
+            <div>
+                <a class="app-menu1" href="/">Hackpy</a>
+                <a class="app-menu5" href="/news/comments">Comments</a>
+                <a class="app-menu5" href="/news/links">Links</a>
+            </div>
+                {% if user.is_authenticated %}
+                <div class="user_credentials">
+                    <span class="login-button">{{ user.username }}</span>
+               
+                {% endif %}
+                {% if user.is_authenticated %}
+    
+                <button class="login-button">
+                    <a href="{% url 'logout' %}">LogOut</a>
+                </button>
+                {% else %}
+                <button class="login-button">
+                    <a href="{% url 'login' %}">Login</a>
+                </button>
+    
+                {% endif %}
+        </div>
+    </header>
+
+    <div id="news-list">
+        {% if news_items %}
+            {% for news_item in news_items %}
+            <div class="news-item">
+                <div class="serial-number">{{ forloop.counter }}.</div>
+                <button class="upvote-button"><a href="{% url 'vote' news_item.id %}">▲</a></button>
+                <div>
+                    <div class="news-title">
+                        <a class="news-link" href="{{ news_item.link }}">{{ news_item.title }}</a>
+                    </div>
+                    <div class="news-details">
+                        {{ news_item.points }} points  {{ news_item.author }} {{ news_item.date|timesince }} ago | 
+                        <a href="#">hide</a> | {{ news_item.comments }} comments
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div>
+
+    <div class="pagination">
+        {% if news_items.has_next %}
+            <a href="?q={{ query }}&page={{ news_items.next_page_number }}">More</a>
+        {% endif %}
+    </div>
+
+    <div class="search-bar">
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</body>
+</html>

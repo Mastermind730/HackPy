@@ -1,0 +1,66 @@
+body {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+}
+a {
+    color: #000000;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #828282;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.pagestop {
+    background-color: #ff6600;
+}
+
+.pagetop a {
+    color: #ffffff;
+    font-size: 8pt;
+}
+
+.pagetop b a {
+    font-size: 14pt;
+}
+
+.itemlist {
+    font-size: 10pt;
+}
+
+.title {
+    padding-right: 10px;
+}
+
+.subtext {
+    color: #828282;
+}
+
+.score {
+    font-weight: bold;
+}
+
+.votearrow {
+    width: 10px;
+    height: 10px;
+    background: url('{% static 'news/grayarrow.gif' %}');
+}
+
+.votearrow:hover {
+    cursor: pointer;
+}
+
+.hnname {
+    color: #ffffff;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+.rank {
+    font-size: 10pt;
+    padding-right: 4px;
+}

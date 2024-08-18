@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .vote-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .vote-form label {
+            font-weight: bold;
+        }
+        .vote-form button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .vote-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vote</h1>
+        <p>Voting on news ID: {{ news_id }}</p>
+
+        <form class="vote-form" method="POST" action="{% url 'vote' news_id=news_id %}">
+        <!-- <form class="vote-form" method="POST" action="{% url 'vote' news_id=news_id %}"> -->
+            {% csrf_token %}
+            <label for="vote_type">Choose your vote:</label>
+            <select id="vote_type" name="vote_type" required>
+                <option value="upvote">Upvote</option>
+                <option value="downvote">Downvote</option>
+            </select>
+            <button type="submit">Submit Vote</button>
+        </form>
+    </div>
+</body>
+</html>

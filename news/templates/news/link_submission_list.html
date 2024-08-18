@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Link Submissions{% endblock %}
+
+{% block content %}
+<h1>Link Submissions</h1>
+<div style="text-align: center;">
+    <a href="/news/submit_link"><button>Submit a Link</button></a>
+</div>
+<ul>
+    {% for link in links %}
+        <li>
+            <h2>{{ link.title }}</h2>
+            <p><a href="{{ link.url }}">{{ link.url }}</a></p>
+            <p>{{ link.description }}</p>
+            <p>Submitted by: {{ link.user.username }}</p>
+            <p>Submitted on: {{ link.created_at }}</p>
+        </li>
+    {% endfor %}
+</ul>
+<style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            margin: 10px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        li h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        li p {
+            margin: 5px 0;
+            color: #666;
+        }
+        li a {
+            color: #0066cc;
+        }
+</style>
+{% endblock %}

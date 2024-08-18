@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}News Detail{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>News Detail</h1>
+    <p>News ID: {{ news_id }}</p>
+    {% load humanize %}
+
+    <div class="news-item">
+        <a href="{{ news_item.url }}">{{ news_item.title }}</a>
+        <p class="news-meta">
+            {{ news_item.points }} points by {{ news_item.user.username }} | 
+            {{ news_item.created_at|naturaltime }} | 
+            <a href="{% url 'news_detail' news_item.id %}">{{ news_item.comments.count }} comments</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

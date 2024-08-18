@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Comments{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Comments</h1>
+
+    <!-- Add Comment Form -->
+    <div class="form-container">
+        <h2>Add a Comment</h2>
+        <form id="comment-form" method="POST">
+            {% csrf_token %}
+            <textarea name="comment" id="comment-textarea" rows="4" placeholder="Add your comment here..."></textarea>
+            <input type="hidden" name="form_type" value="comment_form">
+            <button class="reply-button" type="submit">Submit Comment</button>
+        </form>
+    </div>
+
+    <ul class="comment-list">
+        {% for comment in comments %}
+            <li class="comment">
+                <div class="comment-header">
+                    <strong>{{ comment.name }}</strong> ({{ comment.email }})
+                </div>
+                <div class="comment-body">
+                    {{ comment.comment|safe }}
+                </div>
+                <div class="comment-footer">
+                    <em>{{ comment.created_at }}</em>
+                </div>
+                <button class="reply-button" onclick="toggleReplyForm({{ comment.id }})">Reply</button>
+                <div id="reply-form-{{ comment.id }}" class="reply-form" style="display: none;">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <textarea name="reply" rows="2" placeholder="Add your reply here..."></textarea>
+                        <input type="hidden" name="form_type" value="reply_form_{{ comment.id }}">
+                        <button class="reply-button" type="submit">Submit Reply</button>
+                    </form>
+                </div>
+                <ul class="replies">
+                    {% for reply in comment.replies.all %}
+                        <li class="reply">
+                            {{ reply.reply|safe }}
+                            <div class="comment-footer">
+                                <em>{{ reply.created_at }}</em>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% empty %}
+            <li class="no-comments">No comments yet.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="buttons">
+        <a href="/news/links" class="add-comment-button">See Links</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        new EasyMDE({ 
+            element: document.getElementById('comment-textarea'),
+            // autoDownloadFontAwesome: false,
+            // toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide']
+        });
+    });
+
+    function toggleReplyForm(commentId) {
+        var form = document.getElementById('reply-form-' + commentId);
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6ef;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .comment-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comment {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e2e2e2;
+        }
+
+        .comment-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .comment-body {
+            margin-bottom: 5px;
+        }
+
+        .comment-footer {
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .replies {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .reply {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-bottom: 1px solid #e2e2e2;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #777;
+        }
+
+        .add-comment-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .add-comment-button:hover {
+            background-color: #0056b3;
+        }
+
+        .reply-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .reply-button:hover {
+            background-color: #218838;
+        }
+
+        .reply-form {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .reply-form textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+        }
+</style>
+{% endblock %}
